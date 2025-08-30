@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eSHMO IDEAS OPC P LTD - Artificially True Intelligence</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #0a0a2a;
+            --secondary: #00f3ff;
+            --accent: #ff00c8;
+            --metallic-gold: #ffd700;
+            --metallic-silver: #c0c0c0;
+            --metallic-bron极: #cd7f32;
+            --text: #ffffff;
+            --dark-text: #aaaaaa;
+            --card-bg: rgba(10, 10, 42, 0.8);
+            --logo-color: #ff6b6b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            color: var(--text);
+            background-color: var(--primary);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+        
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        #canvas3d {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Fixed header spacing issue */
+        header {
+            padding: 10px 0; /* Reduced padding to remove unwanted space */
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 10, 42, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 243, 255, 0.2);
+        }
+        
+        header.scrolled {
+            padding: 8px 0; /* Adjusted scrolled padding */
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem; /* Slightly reduced size */
+            font-weight: 900;
+            color: var(--metallic-gold);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .logo .e {
+            font-size: 2rem; /* Adjusted size */
+            color: var(--secondary);
+        }
+        
+        .logo .shmo {
+            color: var(--metallic-gold);
+        }
+        
+        .logo .ideas {
+            color: var(--accent);
+            margin-left: 5px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px; /* Slightly reduced margin */
+        }
+        
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem; /* Slightly reduced font size */
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--metallic-gold);
+            transition: all 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--metallic-gold);
+        }
+        
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 70px; /* Adjusted to account for smaller header */
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            z-index: 10;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--metallic-gold), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s infinite alternate;
+        }
+        
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+        
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: var(--dark-text);
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 30px;
+            background: linear-gradient(45deg, var(--metallic-gold), var(--secondary));
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: all 0.5s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 215, 0, 0.5);
+        }
+        
+极.btn:hover:before {
+            left: 100%;
+        }
+        
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--metallic-gold);
+            text-shadow: 0 极 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--dark-text);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        
+        .service-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .service-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 0;
+            background: linear-gradient(to bottom, var(--metallic-gold), var(--secondary));
+            transition: all 0.5s ease;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+            border-color: var(--metallic-gold);
+        }
+        
+        .service-card:hover:before {
+            height: 100%;
+        }
+        
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--metallic-gold);
+        }
+        
+        .service-card p {
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            flex-grow: 0;
+        }
+        
+        .service-card ul {
+            list-style: none;
+            margin-bottom: 20px;
+            flex-grow: 1;
+        }
+        
+        .service-card ul li {
+            margin-bottom: 10px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .service-card ul li:before {
+            content: '▹';
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+        }
+        
+        .services-content {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .services-content h3 {
+            font-size: 2rem;
+            color: var(--metallic-gold);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .services-content p {
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .services-content .highlight {
+            color: var(--metallic-gold);
+            font-weight: 600;
+        }
+        
+        /* Packages Section - Fixed text alignment */
+        .packages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            align-items: stretch;
+        }
+        
+        .package-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .package-card.featured {
+            transform: scale(1.05);
+            border: 2px solid var(--metallic-gold);
+            z-index: 1;
+        }
+        
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+            border-color: var(--metallic-gold);
+        }
+        
+        .package-card.featured:hover {
+            transform: scale(1.05) translateY(-10px);
+        }
+        
+        .package-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--metallic-gold);
+        }
+        
+        .package-card .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--metallic-gold);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .package-card .features {
+            list-style: none;
+            margin-bottom: 30px;
+            flex-grow: 1;
+            text-align: left; /* Fixed text alignment */
+            padding: 0 15px; /* Added padding for better spacing */
+        }
+        
+        .package-card .features li {
+            margin-bottom: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .timeline:before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--metallic-gold), var(--accent));
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+        
+        .timeline-content {
+            width: 45%;
+            padding: 20px;
+            background: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .timeline-content h3 {
+            color: var(--metallic-gold);
+            margin-bottom: 10px;
+        }
+        
+        .timeline-content p {
+            color: var(--dark-text);
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            background: var(--metallic-gold);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 0 5px rgba(255, 215, 0, 0.2);
+        }
+        
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+        
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--metallic-gold);
+        }
+        
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--dark-text);
+        }
+        
+        .profile-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 极.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .profile-card img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid var(--metallic-gold);
+        }
+        
+        .profile-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            color: var(--metallic-gold);
+        }
+        
+        .profile-card .designation {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .profile-card .website-link {
+            display: block;
+            margin-bottom: 20px;
+        }
+        
+        .profile-card .website-link a {
+            color: var(--metallic-gold);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .profile-card .website-link a:hover {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+        
+        /* Collaboration Section */
+        .collaboration-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40极;
+            margin: 60px 0;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .collaboration-section h3 {
+            font-size: 2rem;
+            color: var(--metallic-gold);
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .collaboration-section p {
+            color: var(--dark-text);
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .collaboration-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .collaboration-card {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .collaboration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.15);
+            border-color: var(--metallic-gold);
+        }
+        
+        .collaboration-card h4 {
+            color: var(--metallic-gold);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+        
+        .collaboration-card p {
+            color: var(--dark-text);
+            margin: 0;
+            text-align: center;
+        }
+        
+        .ethics-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            margin: 60px 0;
+            backdrop-filter: blur(极0px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .ethics-section h3 {
+            font-size: 2rem;
+            color: var(--metallic-gold);
+            margin-bottom: 20px;
+            text-align: center;
+极       }
+        
+        .ethics-content {
+            margin极top: 40px;
+        }
+        
+        .ethics-pillar {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--metallic-gold);
+        }
+        
+        .ethics-pillar h4 {
+            color: var(--metallic-gold);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .ethics-pillar h4 .极illar-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: var(--metallic-gold);
+极           color: var(--primary);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 10px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+        
+        .ethics-pillar p {
+            color: var(--dark-text);
+        }
+        
+        /* Contact Form */
+        .contact-form {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--metallic-gold);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            font-family: 'Exo 2', sans-serif;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--metallic-gold);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 极.2);
+        }
+        
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+        
+        .form-btn {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        footer {
+            background: rgba(10, 10, 42, 0.9);
+            padding: 50px 0 20px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-section h3 {
+            color: var(--metallic-gold);
+            margin-bottom: 20px;
+        }
+        
+        .footer-section p,
+        .footer-section a {
+            color: var(--dark-text);
+            margin-bottom: 10px;
+            display: block;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-section a:hover {
+            color: var(--metallic-gold);
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .social-links a:hover {
+            background: var(--metallic-gold);
+            color: var(--primary);
+            transform: translateY(-3px);
+            border-color: var(--metallic-gold);
+        }
+        
+        .copyright {
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px; /* Adjusted margin */
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .logo {
+                font-size: 2rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.2rem;
+            }
+            
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .timeline:before {
+                left: 20px;
+            }
+            
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                flex-direction: row;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 60px);
+                margin-left: 60px;
+            }
+            
+            .timeline-dot {
+                left: 20px;
+            }
+            
+            .collaboration-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .social-links {
+                gap: 10px;
+            }
+            
+            .social-links a {
+                width: 35px;
+                height: 35px;
+            }
+            
+            /* Mobile adjustments for services */
+            .services-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .service-card {
+                padding: 20px;
+            }
+            
+            /* Mobile adjustments for packages */
+            .packages {
+                grid-template-columns: 1fr;
+            }
+            
+            .package-card.featured {
+                transform: scale(1);
+            }
+            
+            .package-card.featured:hover {
+                transform: translateY(-10px);
+            }
+            
+            /* Mobile adjustments for contact form */
+            .contact-form {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <canvas id="canvas3d"></canvas>
+    
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo"><span class="e">e</span><span class="shmo">SHMO</span> <span class="ideas">IDEAS</span></a>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#services">Services</a></li>
+                    <li><a href="#collaboration">Collaboration</a></li>
+                    <li><a href="#ethics">Ethics</a></li>
+                    <li><a href="#packages">Packages</a></li>
+                    <li><a href="#timeline">Process</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section id="home" class="hero">
+        <div class="container hero-content">
+            <h1>Artificially True Intelligence</h1>
+            <p>Empowering businesses with AI-driven strategy, design, and deployment for maximum ROI and transformative growth.</p>
+            <a href="#contact" class="btn">Book a Consultation</a>
+        </div>
+    </section>
+    
+    <section id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our AI Services</h2>
+                <p>Comprehensive AI solutions tailored to your business needs</p>
+            </div>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <h3>AI Strategy & Advisory</h3>
+                    <p>Strategic guidance to prepare your business for极I adoption</p>
+                    <ul>
+                        <li>AI Readiness Assessment</li>
+                        <li>AI Roadmap & Planning</li>
+                        <li>Business Process Automation</li>
+                        <li>AI Ethics & Governance</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3>LLM & NLP Consulting</h3>
+                    <p>Custom language models and AI assistants for your domain</p>
+                    <ul>
+                        <li>LLM Pre-training & Fine-tuning</li>
+                        <li>RAG Systems</li>
+                        <li>Custom Chatbots & AI Assistants</li>
+                        <li>Multilingual AI Solutions</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Machine Learning Solutions</h3>
+                    <p>Advanced ML/DL models for predictive analytics and automation</p>
+                    <ul>
+                        <li>Custom ML Models</li>
+                        <li>Neural Networks & Deep Learning</li>
+                        <li>Model Optimization</li>
+                        <li>Computer Vision Solutions</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Agentic AI Systems</h3>
+                    <p>Intelligent agents that automate complex workflows</p>
+                    <ul>
+                        <li>Multi-Agent Systems</li>
+                        <li>Workflow Orchestration</li>
+                        <li>Decision Support Systems</li>
+                        <li>Autonomous Operations</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3>AI-Powered Software</h3>
+                    <p>Integrating AI into your applications and platforms</p>
+                    <ul>
+                        <li>AI-Powered Web & Mobile Apps</li>
+                        <li>AI-Powered Websites</li>
+                        <li>Enterprise AI Integrations</li>
+                        <li>SaaS AI Solutions</li>
+                    </ul>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Specialized Domains</h3>
+                    <p>Industry-specific AI solutions for high-demand niches</p>
+                    <ul>
+                        <li>Finance & Trading AI</li>
+                        <li>Healthcare AI</li>
+                        <li>Education AI</li>
+                        <li>E-commerce AI</li>
+                        <li>Creative AI</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="services-content">
+                <h3>Transform Your Business with AI</h3>
+                <p>At <span class="highlight">eSHMO IDEAS</span>, we don't just implement AI solutions—we transform how you do business. Our comprehensive suite of AI services is designed to address every stage of your AI journey, from initial strategy to ongoing optimization.</p>
+                
+                <p>Whether you're just beginning to explore AI's potential or looking to scale existing initiatives, our team of experts provides the guidance and technical excellence needed to achieve measurable results. We combine cutting-edge AI research with deep industry knowledge to deliver solutions that are both innovative and practical.</p>
+                
+                <p>Our approach is centered on understanding your unique business challenges and opportunities. We then design and implement AI solutions that drive real value—increasing efficiency, reducing costs, improving customer experiences, and creating new revenue streams.</p>
+                
+                <p>With <span class="highlight">eSHMO IDEAS</span>, you gain more than just AI capabilities—you gain a strategic partner committed to your long-term success in an increasingly AI-driven world.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section id="collaboration">
+        <div class="container">
+            <div class="section-title">
+                <h2>Global Teams & Collaboration</h2>
+                <p>Partnering with organizations worldwide to drive AI innovation</p>
+            </div>
+            
+            <div class="collaboration-section">
+                <h3>Our Collaborative Approach</h3>
+                <p>At eSHMO IDEAS, we believe that the most powerful AI solutions emerge from diverse perspectives and collaborative efforts. Our global network of experts, researchers, and partner organizations allows us to tackle complex challenges and deliver innovative solutions that transcend geographical boundaries.</p>
+                
+                <div class="collaboration-content">
+                    <div class="collaboration-card">
+                        <h4>India Collaboration</h4>
+                        <p>We work closely with Indian tech hubs, academic institutions, and startups develop AI solutions tailored to the unique needs of the Indian market and beyond.</p>
+                    </div>
+                    
+                    <div class="collaboration-card">
+                        <h4>Global Partnerships</h4>
+                        <p>Our international collaborations span across North America, Europe, and Asia, bringing together the best minds in AI research and development.</p>
+                    </div>
+                    
+                    <div class="collaboration-card">
+                        <h4>Research Alliances</h4>
+                        <p>We partner with leading universities and research institutions to advance the frontiers of AI technology and ensure our solutions are grounded in cutting-edge science.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="ethics">
+        <div class="container">
+            <div class="section-title">
+                <h2>Ethics & Policy</h2>
+                <p>Our commitment to responsible and ethical AI development</p>
+            </div>
+            
+            <div class="ethics-section">
+                <h3>Our Ethical Foundation</h3>
+                <p>eSHMO IDEAS OPC P LTD is built on the foundation of responsibility, awareness, and a vision that technology should serve humanity's higher purpose. We believe that AI must not only accelerate progress but also harmonize with human values, ecosystems, and future generations. Our commitment goes beyond algorithms—we design systems that embody trust, empathy, and sustainability. By uniting digital, physical, biological, and quantum layers of intelligence, we create a roadmap where technology aligns with evolution. These 10 guiding principles form the pillars of our mission and our promise to the world.</p>
+                
+                <div class="ethics-content">
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">1</span> Transparency</h4>
+                        <p>Transparency means building AI systems that can explain their reasoning, decision-making processes, and data sources in a way humans can understand. It avoids "black box" models where no one knows how results are produced.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">2</span> Responsibility</h4>
+                        <p>AI creators, companies, and users must all take shared responsibility for how AI is designed and deployed. Responsibility doesn't end at the design stage; it extends to monitoring AI after it has been released.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">3</span> Privacy & Security</h4>
+                        <p>In an AI-powered society, privacy is a fundamental human right that cannot be compromised. AI systems must ensure data minimization, encrypt sensitive inputs, and grant full control of personal data back to the individual.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">4</span> Human-Centric Evolution</h4>
+                        <p>AI should never aim to replace human potential but instead expand it. Human-centric evolution means building AI that enhances awareness, creativity, learning, and wellness.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">5</span> Ethical Deployment</h4>
+                        <p>Deployment is the true极est of ethics, because even a perfectly designed AI can become harmful if misused. Ethical deployment requires testing for bias, ensuring fairness, and minimizing unintended consequences.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">6</span> Inclusivity & Fairness</h4>
+                        <p>AI must be designed to serve all humans equally, regardless of culture, background, language, or geography. Inclusivity ensures no group is left behind in the age of intelligent systems.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">7</span> Sustainability</h4>
+                        <p>Sustainability is about designing AI systems that protect the planet as much as they protect people. Training massive models must shift towards eco-friendly energy sources and efficient hardware.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">8</span> Continuous Oversight</h4>
+                        <p>AI cannot be left to evolve without regular checks and balances. Continuous oversight means independent review boards, open audits, and global cooperation to monitor how AI systems grow.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">9</span> Education & Awareness</h4>
+                        <p>An ethical AI future requires humans to be educated about its workings and impacts. Education ensures individuals, from students to policymakers, understand both the power and the limitations of AI.</p>
+                    </div>
+                    
+                    <div class="ethics-pillar">
+                        <h4><span class="pillar-number">10</span> Collective Benefit</h4>
+                        <p>The highest principle of Trust & Ethics is ensuring that AI development benefits not just a few, but the many. AI should reduce inequality, uplift struggling communities, and serve as a force for collective growth.</极>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="packages">
+        <div class="container">
+            <div class="section-title">
+                <h2>AI Consulting Packages</h2>
+                <p>Tailored solutions for businesses at every stage of AI maturity</p>
+            </div>
+            
+            <div class="packages">
+                <div class="package-card">
+                    <h3>Strategy & Advisory</h3>
+                    <div class="price">Custom Pricing</div>
+                    <ul class="features">
+                        <li>AI Readiness Assessment</li>
+                        <li>Use Case Discovery</li>
+                        <li>AI Roadmap Planning</li>
+                        <li>Ethics & Compliance Guidance</li>
+                        <li>Feasibility Studies</li>
+                    </ul>
+                    <a href="#contact" class="btn">Get Started</a>
+                </div>
+                
+                <div class="package-card featured">
+                    <h3>Custom AI Development</h3>
+                    <div class="price">Project-Based</div>
+                    <ul class="features">
+                        <li>Data Collection & Preprocessing</li>
+                        <li>LLM Fine-Tuning</li>
+                        <li>Custom ML Model Development</li>
+                        <li>AI Agents & Systems</li>
+                        <li>DL & Neural Networks</li>
+                        <li>Testing & Validation</li>
+                    </ul>
+                    <a href="#contact" class="btn">Get Started</a>
+                </div>
+                
+                <div class="package-card">
+                    <h3>AI-Powered Applications</h3>
+                    <div class="price">Project + Retainer</div>
+                    <ul class="features">
+                        <li>AI Web & Mobile Apps</li>
+                        <li>CRM/ERP Integration</li>
+                        <li>Multi-Agent Systems</li>
+                        <li>Cloud Deployment</li>
+                        <li>Monitoring & Optimization</li>
+                    </ul>
+                    <a href="#contact" class="btn">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="timeline">
+        <div class="container">
+            <div class="section极itle">
+                <h2>Implementation Process</h2>
+                <p>Our structured approach to AI implementation and deployment</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 1: Strategy & Planning</h3>
+                        <p>Kickoff meeting, AI readiness assessment, use case identification, roadmap development.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 2: Data & Model Development</h3>
+                        <p>Data collection, preprocessing, model training, fine-tuning, and validation.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 3: Application Development</h3>
+                        <p>API development, integration, UI/UX design, and testing.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 4: Deployment & Go-Live</h3>
+                        <p>Cloud deployment, scalability testing, staff training, and documentation.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-content">
+                        <h3>Phase 5: Monitoring & Improvement</h3>
+                        <p>Performance monitoring, model retraining, optimization, and ongoing support.</p>
+                    </div>
+                    <div class="timeline-dot"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Us</h2>
+                <p>Transforming businesses with Artificially True Intelligence</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>eSHMO IDEAS OPC P LTD</h2>
+                    <p>We specialize in creating AI solutions that deliver real business value. Our approach combines cutting-edge AI research with practical business understanding to develop solutions that are both innovative and actionable.</p>
+                    <p>Our mission is make AI accessible, ethical, and practical for every industry. We believe in "Artificially True Intelligence" - AI that genuinely understands and solves real business problems.</p>
+                    <p>With expertise across the full AI stack - from strategy to model development to deployment - we help organizations navigate their AI journey with confidence.</p>
+                </div>
+                
+                <div class="profile-card">
+                    <img src="https://via.placeholder.com/150" alt="Saravanan Arjunan">
+                    <h3>Saravanan Arjunan</h3>
+                    <div class="designation">AI Consultant & Advisory</div>
+                    <div class="website-link">
+                        <a href="https://saravananarjunan2035.wordpress.com" target="_blank">https://saravananarjunan2035.wordpress.com</a>
+                    </div>
+                    <p>Expert in LLM pre-training, fine-tuning, ML/DL, agentic AI systems, and AI-powered applications. Helping organizations design, build, and deploy scalable AI solutions.</p>
+                    <div class="social-links">
+                        <a href="mailto:info@eshmoai.online"><i class="fas fa-envelope"></i></a>
+                        <a href="https://consciouslivingai.wordpress.com" target="_blank"><i class="fas fa-globe"></i></a>
+                        <a href="https://www.linkedin.com/company/14502934" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Ready to transform your business with AI? Let's talk</p>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" required></textarea>
+                    </div>
+                    
+                    <div class="form-btn">
+                        <button type="submit" class="btn">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>eSHMO IDEAS OPC P LTD</h3>
+                    <p>Artificially True Intelligence</p>
+                    <p>Transforming businesses with cutting-edge AI solutions</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <a href="mailto:info@eshmoai.online">info@eshmoai.online</a>
+                    <a href="mailto:services@eshmoai.online">services@eshmoai.online</a>
+                    <a href="https://consciouslivingai.wordpress.com" target="_blank">https://consciouslivingai.wordpress.com</a>
+                    <p>GOBI, Tamil Nadu, INDIA</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-links">
+                        <a href="https://x.com/eshmoideas" target="_blank"><i class="fab fa-twitter"></i></a>
+                        <a href="极ttps://www.linkedin.com/company/14502934" target="_blank"><极 class="fab fa-linkedin-in"></i></a>
+                        <a href="https://github.com/eshmoideas" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="https://huggingface.co/saravana135" target="_blank"><i class="fas fa-robot"></i></a>
+                        <a href="https://www.facebook.com/735452919654125" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://wa.me/917975162226" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 eSHMO IDEAS OPC P LTD. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Initialize particles.js
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: "#00f3ff" },
+                shape: { type: "circle" },
+                opacity: { value: 0.5, random: true },
+                size: { value: 3, random: true },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: "#00f3ff",
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 2,
+                    direction: "none",
+                    random: true,
+                    straight: false,
+                    out_mode: "out",
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: "canvas",
+                events: {
+                    onhover: { enable: true, mode: "grab" },
+                    onclick: { enable: true, mode: "push" },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+        
+        // Three.js 3D background
+        let scene, camera, renderer, geometry, material, mesh;
+        
+        function init3D() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas3d'), alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Create a mathematical shape (dodecahedron)
+            geometry = new THREE.DodecahedronGeometry(2, 0);
+            material = new THREE.MeshPhongMaterial({ 
+                color: 0x00f3ff,
+                wireframe: true,
+                shininess: 100
+            });
+            mesh = new THREE.Mesh(geometry, material);
+            scene.add(mesh);
+            
+            // Add lights
+            const light1 = new THREE.PointLight(0x00f3ff, 1, 100);
+            light1.position.set(10, 10, 10);
+            scene.add(light1);
+            
+            const light2 = new THREE.PointLight(0xff00c8, 1, 100);
+            light2.position.set(-10, -10, -10);
+            scene.add(light2);
+            
+            camera.position.z = 5;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                mesh.rotation.x += 0.005;
+                mesh.rotation.y += 0.01;
+                
+                // Pulsating effect
+                const scale = 1 + 0.1 * Math.sin(Date.now() * 0.002);
+                mesh.scale.set极scale, scale, scale);
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+        
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 70, /* Adjusted for smaller header */
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            // Create mailto link
+            const subject = `Consultation Request from ${name}`;
+            const body = `Name: ${name}%0D%0AEmail: ${email}%0D%0AMessage:%0D%0A${message}`;
+            
+            // Open email client
+            window.location.href = `mailto:info@eshmoai.online?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            
+            // Reset form
+            this.reset();
+        });
+        
+        // Initialize everything when the page loads
+        window.addEventListener('load', () => {
+            init3D();
+        });
+    </script>
+</body>
+</html>
